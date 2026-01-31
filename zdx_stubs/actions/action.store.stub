@@ -9,10 +9,8 @@ class {{ class }}
 {
     public function __construct(private {{ service }} $service) {}
 
-    public function handle(): array
+    public function handle(array $data): {{ model }}
     {
-        return [
-
-        ];
+        return $this->service->create($data);
     }
 }

@@ -32,42 +32,40 @@ class MakeCrudFilesCommand extends Command
         $group = Str::studly($this->argument('group'));
         $name = Str::studly($this->argument('name'));
         $plural = Str::pluralStudly($name);
-        $kebab = Str::kebab($name);
-        $kebabPlural = Str::kebab($plural);
 
         $this->info("Generating CRUD for {$name}...");
 
-        // // Model
-        // $this->makeModel($group, $name);
+        // Model
+        $this->makeModel($group, $name);
 
-        // // Migration
-        // $table = Str::snake($plural);
-        // $this->makeMigration($table);
+        // Migration
+        $table = Str::snake($plural);
+        $this->makeMigration($table);
 
-        // // Seeder
-        // $this->makeSeeder($name);
+        // Seeder
+        $this->makeSeeder($name);
 
-        // // Controller
-        // $this->makeController($dir, $group, $name);
+        // Controller
+        $this->makeController($dir, $group, $name);
 
-        // // // Request
-        // $columns = [
-        //     'status' => 'boolean',
-        // ];
-        // $this->makeRequest($group, $name, 'store', $columns);
-        // $this->makeRequest($group, $name, 'update', $columns);
+        // // Request
+        $columns = [
+            'status' => 'boolean',
+        ];
+        $this->makeRequest($group, $name, 'store', $columns);
+        $this->makeRequest($group, $name, 'update', $columns);
 
-        // // Resource
-        // $this->makeResource($group, $name);
+        // Resource
+        $this->makeResource($group, $name);
 
-        // // Actions
-        // $actionTypes = ['create', 'update', 'delete', 'restore', 'forceDelete', 'changeStatus'];
-        // foreach ($actionTypes as $actionType) {
-        //     $this->makeAction($group, $name, $actionType);
-        // }
+        // Actions
+        $actionTypes = ['list', 'create', 'store', 'show', 'edit', 'update', 'delete', 'restore', 'forceDelete', 'changeStatus'];
+        foreach ($actionTypes as $actionType) {
+            $this->makeAction($group, $name, $actionType);
+        }
 
-        // // Service
-        // $this->makeService($group, $name);
+        // Service
+        $this->makeService($group, $name);
 
         // Views
         $this->makeViews($group, $name);
@@ -159,10 +157,15 @@ class MakeCrudFilesCommand extends Command
             'modelVar' => lcfirst($name),
             'storeRequest' => "Store{$name}Request",
             'updateRequest' => "Update{$name}Request",
+            'requestNamespace' => "App\Http\Requests\\{$group}",
             'resource' => "{$name}Resource",
             'resourceNamespace' => "App\Http\Resources\\{$group}",
-            'actionsNamespace' => "App\Actions\\{$group}\\{$name}",
+            'actionsNamespace' => "App\Actions\\{$group}",
             'class' => "{$name}Controller",
+            'inertiaListingPage' => "{$dir}/{$group}/" . "{$name}" . Str::studly('List'),
+            'inertiaCreatePage' => "{$dir}/{$group}/" . "{$name}" . Str::studly('create'),
+            'inertiaEditPage' => "{$dir}/{$group}/" . "{$name}" . Str::studly('edit'),
+            'inertiaDetailsPage' => "{$dir}/{$group}/" . "{$name}" . Str::studly('details'),
         ]);
 
         file_put_contents($path, $content);
