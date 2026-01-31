@@ -11,6 +11,6 @@ class {{ class }}
 
     public function handle(array $data): {{ model }}
     {
-        return $this->service->create($data);
+        
     }
 }

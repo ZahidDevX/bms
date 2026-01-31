@@ -268,7 +268,7 @@ class MakeCrudFilesCommand extends Command
             'namespace' => "App\Services\\{$group}",
             'modelNamespace' => "App\Models\\{$group}",
             'model' => $name,
-            'modelVar' => lcfirst($name),
+            'modelVariable' => lcfirst($name),
             'class' => "{$name}Service",
         ]);
 

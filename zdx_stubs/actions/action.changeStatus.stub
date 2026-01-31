@@ -11,7 +11,7 @@ class {{ class }}
 
     public function handle({{ model }} ${{ modelVar }}, bool $status): {{ model }}
     {
-        return $this->service->changeStatus(${{ modelVar }}, $status);
+        
     }
 
 }

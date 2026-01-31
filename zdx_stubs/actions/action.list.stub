@@ -10,6 +10,6 @@ class {{ class }}
     public function __construct(private {{ service }} $service) {}
     public function handle(): array
     {
-        return $this->service->list();
+        
     }
 }    
