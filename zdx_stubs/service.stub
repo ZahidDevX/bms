@@ -1,0 +1,41 @@
+<?php
+
+namespace {{ namespace }};
+
+use {{ modelNamespace }}\{{ model }};
+
+class {{ class }}
+{
+    public function create(array $data): {{ model }}
+    {
+        return {{ model }}::create($data);
+    }
+
+    public function update({{ model }} ${{ modelVar }}, array $data): {{ model }}
+    {
+        ${{ modelVar }}->update($data);
+        return ${{ modelVar }};
+    }
+
+    public function delete({{ model }} ${{ modelVar }}): void
+    {
+        ${{ modelVar }}->delete();
+    }
+
+    public function restore({{ model }} ${{ modelVar }}): void
+    {
+        ${{ modelVar }}->restore();
+    }
+
+    public function forceDelete({{ model }} ${{ modelVar }}): void
+    {
+        ${{ modelVar }}->forceDelete();
+    }
+
+    public function changeStatus({{ model }} ${{ modelVar }}, bool $status): {{ model }}
+    {
+        ${{ modelVar }}->status = $status;
+        ${{ modelVar }}->save();
+        return ${{ modelVar }};
+    }
+}

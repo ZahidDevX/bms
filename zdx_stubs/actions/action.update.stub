@@ -1,0 +1,16 @@
+<?php
+
+namespace {{ namespace }};
+
+use {{ modelNamespace }}\{{ model }};
+use {{ serviceNamespace }}\{{ service }};
+
+class {{ class }}
+{
+    public function __construct(private {{ service }} $service) {}
+
+    public function handle({{ model }} ${{ modelVar }}, array $data): {{ model }}
+    {
+        return $this->service->update(${{ modelVar }}, $data);
+    }
+}

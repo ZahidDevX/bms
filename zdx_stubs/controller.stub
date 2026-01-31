@@ -1,0 +1,117 @@
+<?php
+
+namespace {{ namespace }};
+
+use {{ modelNamespace }}\{{ model }};
+use App\Http\Controllers\Controller;
+use App\Http\Requests\{{ storeRequest }};
+use App\Http\Requests\{{ updateRequest }};
+use {{ resourceNamespace }}\{{ resource }};
+use {{ actionsNamespace }}\Create{{ model }}Action;
+use {{ actionsNamespace }}\Update{{ model }}Action;
+use {{ actionsNamespace }}\Delete{{ model }}Action;
+use {{ actionsNamespace }}\Restore{{ model }}Action;
+use {{ actionsNamespace }}\ForceDelete{{ model }}Action;
+use {{ actionsNamespace }}\Change{{ model }}StatusAction;
+
+class {{ class }} extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
+
+    public function index()
+    {
+        return {{ resource }}::collection({{ model }}::paginate());
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+
+    public function store(Store{{ model }}Request $request, Create{{ model }}Action $action)
+    {
+        return new {{ resource }}(
+            $action->handle($request->validated())
+        );
+    }
+
+    /**
+     * Display the specified resource.
+     */
+
+    public function show({{ model }} ${{ modelVar }})
+    {
+        return new {{ resource }}(${{ modelVar }});
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+
+    public function edit({{ model }} ${{ modelVar }})
+    {
+        return new {{ resource }}(${{ modelVar }});
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+
+    public function update(Update{{ model }}Request $request, {{ model }} ${{ modelVar }}, Update{{ model }}Action $action)
+    {
+        return new {{ resource }}(
+            $action->handle(${{ modelVar }}, $request->validated())
+        );
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+
+    public function destroy({{ model }} ${{ modelVar }}, Delete{{ model }}Action $action)
+    {
+        $action->handle(${{ modelVar }});
+        return response()->noContent();
+    }
+
+    /**
+     * Restore the specified resource from storage.
+     */
+
+    public function restore(int $id, Restore{{ model }}Action $action)
+    {
+        $action->handle({{ model }}::withTrashed()->findOrFail($id));
+        return response()->json(['message' => '{{ model }} restored successfully']);
+    }
+
+    /**
+     * Permanently delete the specified resource from storage.
+     */
+
+    public function forceDelete(int $id, ForceDelete{{ model }}Action $action)
+    {
+        $action->handle({{ model }}::withTrashed()->findOrFail($id));
+        return response()->json(['message' => '{{ model }} permanently deleted']);
+    }
+
+    /**
+     * Change status of the specified resource.
+     */
+
+    public function changeStatus({{ model }} ${{ modelVar }}, Change{{ model }}StatusAction $action)
+    {
+        return new {{ resource }}(
+            $action->handle(${{ modelVar }}, request()->status)
+        );
+    }
+}
