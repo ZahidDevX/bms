@@ -14,7 +14,7 @@ class MakeCrudFilesCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'make:crud {dir} {group} {name}';
+    protected $signature = 'make:crud';
 
     /**
      * The console command description.
@@ -28,9 +28,15 @@ class MakeCrudFilesCommand extends Command
      */
     public function handle()
     {
-        $dir = Str::studly($this->argument('dir'));
-        $group = Str::studly($this->argument('group'));
-        $name = Str::studly($this->argument('name'));
+        $dir = Str::studly($this->ask('What is directory name?'));
+        $group = Str::studly($this->ask('What is group name?'));
+        $name = Str::studly($this->ask('What is class name?'));
+
+        if(!$dir || !$group || !$name){
+            $this->error('All arguments are required!');
+            return;
+        }
+
         $plural = Str::pluralStudly($name);
 
         $this->info("Generating CRUD for {$name}...");
@@ -52,8 +58,8 @@ class MakeCrudFilesCommand extends Command
         $columns = [
             'status' => 'boolean',
         ];
-        $this->makeRequest($group, $name, 'store', $columns);
-        $this->makeRequest($group, $name, 'update', $columns);
+        $this->makeRequest($dir,$group, $name, 'store', $columns);
+        $this->makeRequest($dir,$group, $name, 'update', $columns);
 
         // Resource
         $this->makeResource($group, $name);
@@ -68,7 +74,7 @@ class MakeCrudFilesCommand extends Command
         $this->makeService($group, $name);
 
         // Views
-        $this->makeViews($group, $name);
+        $this->makeViews($dir,$group, $name);
 
         $this->info("CRUD files for {$name} generated successfully.");
         return 0;
@@ -157,7 +163,7 @@ class MakeCrudFilesCommand extends Command
             'modelVar' => lcfirst($name),
             'storeRequest' => "Store{$name}Request",
             'updateRequest' => "Update{$name}Request",
-            'requestNamespace' => "App\Http\Requests\\{$group}",
+            'requestNamespace' => "App\Http\Requests\\$dir\\{$group}",
             'resource' => "{$name}Resource",
             'resourceNamespace' => "App\Http\Resources\\{$group}",
             'actionsNamespace' => "App\Actions\\{$group}",
@@ -174,9 +180,9 @@ class MakeCrudFilesCommand extends Command
     /**
      * Create Request
      */
-    protected function makeRequest(string $group, string $name, string $type, array $columns)
+    protected function makeRequest(string $dir,string $group, string $name, string $type, array $columns)
     {
-        $folderPath = app_path("Http/Requests/{$group}");
+        $folderPath = app_path("Http/Requests/{$dir}/{$group}");
         if (!is_dir($folderPath)) {
             mkdir($folderPath, 0755, true);
         }
@@ -194,7 +200,7 @@ class MakeCrudFilesCommand extends Command
         }
 
         $content = StubGenerator::render($stubPath, [
-            'namespace' => "App\Http\Requests\\{$group}",
+            'namespace' => "App\Http\Requests\\$dir\\{$group}",
             'model' => $name,
             'rules' => rtrim($rules),
         ]);
@@ -280,9 +286,9 @@ class MakeCrudFilesCommand extends Command
      * Create Views
      */
 
-    protected function makeViews(string $group, string $name)
+    protected function makeViews(string $dir,string $group, string $name)
     {
-        $folderPath = resource_path("js/pages/{$group}");
+        $folderPath = resource_path("js/pages/{$dir}/{$group}");
         if (!is_dir($folderPath))
             mkdir($folderPath, 0755, true);
 
@@ -314,7 +320,7 @@ class MakeCrudFilesCommand extends Command
             } else {
                 continue;
             }
-            $fileName = Str::studly($group) . Str::studly($viewFile) . ".vue";
+            $fileName = Str::studly($name) . Str::studly($viewFile) . ".vue";
             file_put_contents("{$folderPath}/{$fileName}", $content);
         }
     }
