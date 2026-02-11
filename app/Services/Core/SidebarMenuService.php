@@ -22,7 +22,7 @@ class SidebarMenuService
                 [
                     'label' => 'Dashboard',
                     'icon' => 'pi pi-fw pi-home',
-                    'to' => route('dashboard')
+                    'to' => route('dashboard.index')
                 ],
             ],
         ];

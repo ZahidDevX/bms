@@ -8,7 +8,6 @@ import { createApp, h } from 'vue';
 
 import Aura from '@primeuix/themes/aura';
 import PrimeVue from 'primevue/config';
-import { ZiggyVue } from 'ziggy-js';
 import ToastService from 'primevue/toastservice';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Business Management System';
@@ -19,7 +18,6 @@ createInertiaApp({
     setup({ el, App, props, plugin }) {
         createApp({ render: () => h(App, props) })
             .use(plugin)
-            .use(ZiggyVue)
             .use(PrimeVue, {
                 theme: {
                     preset: Aura,

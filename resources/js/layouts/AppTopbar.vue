@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { useLayout } from '@/layouts/composables/layout';
-import { Link } from '@inertiajs/vue3';
+import { Link, router } from '@inertiajs/vue3';
 import { ref } from "vue";
+import { logout } from '@/wayfinder/routes';
 
 import Button from 'primevue/button';
 import Menu from 'primevue/menu';
@@ -19,6 +20,9 @@ const items = ref([
             {
                 label: 'Sign Out',
                 icon: 'pi pi-sign-out',
+                command: () => {
+                    router.post(logout().url);
+                }
             }
         ]
     }
@@ -27,6 +31,7 @@ const items = ref([
 const toggle = (event) => {
     menu.value.toggle(event);
 };
+
 </script>
 
 <template>
@@ -48,9 +53,6 @@ const toggle = (event) => {
                     <i :class="['pi', { 'pi-moon': isDarkTheme, 'pi-sun': !isDarkTheme }]"></i>
                 </button>
                 
-            </div>
-
-            <div class="layout-topbar-menu hidden lg:block">
                 <div class="layout-topbar-menu-content">
                     <Button type="button" icon="pi pi-user" class="" @click="toggle" aria-haspopup="true" aria-controls="overlay_menu" />
                     <Menu ref="menu" id="profile_menu" :model="items" :popup="true" />

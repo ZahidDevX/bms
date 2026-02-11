@@ -17,6 +17,14 @@ return Application::configure(basePath: dirname(__DIR__))
             HandleInertiaRequests::class,
             AddLinkHeadersForPreloadedAssets::class,
         ]);
+
+        $middleware->redirectGuestsTo(function(){
+            return route('auth.login.form');
+        });
+
+        $middleware->redirectUsersTo(function(){
+            return route('dashboard.index');
+        });
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
