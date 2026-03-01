@@ -11,8 +11,6 @@ class {{ class }}
 
     public function handle({{ model }} ${{ modelVar }}): array
     {
-        return [
-
-        ];
+        return [];
     }
 }

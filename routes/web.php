@@ -1,8 +1,7 @@
 <?php
 
 use App\Http\Controllers\Administration\Auth\EmailVerificationController;
-use Inertia\Inertia;
-use App\Http\Controllers\Hello;
+use App\Http\Controllers\Administration\Authorization\RoleController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Administration\Auth\LoginController;
 use App\Http\Controllers\Administration\Auth\PasswordResetController;
@@ -49,6 +48,15 @@ Route::prefix('access-administration')->group(function () {
         Route::prefix('dashboard')->controller(DashboardController::class)->name('dashboard.')->group(function () {
             Route::get('/', 'index')->name('index');
         });
+
+        // Role Routes
+        Route::prefix('roles/{role}')->controller(RoleController::class)->name('roles.')->group(function () {
+            Route::patch('restore', 'restore')->name('restore');
+            Route::patch('force-delete', 'forceDelete')->name('forceDelete');
+            Route::patch('change-status', 'changeStatus')->name('changeStatus');
+            Route::put('assign-permissions', 'assignPermissions')->name('assignPermissions');
+        });
+        Route::resource('roles', RoleController::class)->except(['create','edit']);
 
         // Logout Route
         Route::post('logout', [LoginController::class, 'logout'])->name('logout');

@@ -122,5 +122,8 @@ return [
         'driver' => env('APP_MAINTENANCE_DRIVER', 'file'),
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
-
+    'developer'=>[
+        'email'=> 'developer@mustamirun.agency',
+        'phone'=> '+8801615882303'
+    ]
 ];

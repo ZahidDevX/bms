@@ -1,7 +1,19 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import PageHeader from '@/components/Administration/PageHeader.vue';
+import AppLayout from '@/layouts/AppLayout.vue';
+import { Head, Link } from '@inertiajs/vue3';
+import Button from 'primevue/button';
+</script>
 
 <template>
-    <div></div>
+    <Head title="" />
+    <AppLayout>
+        <PageHeader title="" description="">
+            <template #buttons>
+                <Button :as="Link" href="#" label="" icon="pi pi-" variant="outlined"></Button>
+            </template>
+        </PageHeader>
+    </AppLayout>
 </template>
 
 <style scoped></style>

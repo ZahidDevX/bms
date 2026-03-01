@@ -9,10 +9,14 @@ class SidebarMenuService
         $menuItems = [];
 
         $menuItems[] = $this->homeMenuItem();
+        $menuItems[] = $this->settingsMenuItem();
 
         return $menuItems;
     }
 
+    /**
+     * Home Menu
+     */
     private function homeMenuItem(): array
     {
         return [
@@ -26,5 +30,29 @@ class SidebarMenuService
                 ],
             ],
         ];
+    }
+
+    /**
+     * Settings Menu
+     */
+    private function settingsMenuItem(): array
+    {
+        $settingsMenu = [];
+
+        // Roles Menu
+        $settingsMenu[] = [
+            'label' => 'Roles',
+            'icon' => 'pi pi-key',
+            'to' => route('roles.index')
+        ];
+
+        if (!empty($settingsMenu)) {
+            return [
+                'label' => 'Settings',
+                'icon' => 'pi pi-cog',
+                'items' => $settingsMenu
+            ];
+        }
+        return [];
     }
 }

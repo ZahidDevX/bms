@@ -5,10 +5,9 @@ import { createInertiaApp } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import type { DefineComponent } from 'vue';
 import { createApp, h } from 'vue';
-
+import ToastService from 'primevue/toastservice';
 import Aura from '@primeuix/themes/aura';
 import PrimeVue from 'primevue/config';
-import ToastService from 'primevue/toastservice';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Business Management System';
 

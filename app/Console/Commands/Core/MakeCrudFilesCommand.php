@@ -32,7 +32,7 @@ class MakeCrudFilesCommand extends Command
         $group = Str::studly($this->ask('What is group name?'));
         $name = Str::studly($this->ask('What is class name?'));
 
-        if(!$dir || !$group || !$name){
+        if (!$dir || !$group || !$name) {
             $this->error('All arguments are required!');
             return;
         }
@@ -58,14 +58,14 @@ class MakeCrudFilesCommand extends Command
         $columns = [
             'status' => 'boolean',
         ];
-        $this->makeRequest($dir,$group, $name, 'store', $columns);
-        $this->makeRequest($dir,$group, $name, 'update', $columns);
+        $this->makeRequest($dir, $group, $name, 'store', $columns);
+        $this->makeRequest($dir, $group, $name, 'update', $columns);
 
         // Resource
         $this->makeResource($group, $name);
 
         // Actions
-        $actionTypes = ['list', 'create', 'store', 'show', 'edit', 'update', 'delete', 'restore', 'forceDelete', 'changeStatus'];
+        $actionTypes = ['store', 'update', 'restore', 'forceDelete'];
         foreach ($actionTypes as $actionType) {
             $this->makeAction($group, $name, $actionType);
         }
@@ -74,7 +74,7 @@ class MakeCrudFilesCommand extends Command
         $this->makeService($group, $name);
 
         // Views
-        $this->makeViews($dir,$group, $name);
+        $this->makeViews($dir, $group, $name);
 
         $this->info("CRUD files for {$name} generated successfully.");
         return 0;
@@ -161,8 +161,8 @@ class MakeCrudFilesCommand extends Command
             'modelNamespace' => "App\Models\\{$group}",
             'model' => $name,
             'modelVar' => lcfirst($name),
-            'storeRequest' => "Store{$name}Request",
-            'updateRequest' => "Update{$name}Request",
+            'storeRequest' => "{$name}StoreRequest",
+            'updateRequest' => "{$name}UpdateRequest",
             'requestNamespace' => "App\Http\Requests\\$dir\\{$group}",
             'resource' => "{$name}Resource",
             'resourceNamespace' => "App\Http\Resources\\{$group}",
@@ -180,7 +180,7 @@ class MakeCrudFilesCommand extends Command
     /**
      * Create Request
      */
-    protected function makeRequest(string $dir,string $group, string $name, string $type, array $columns)
+    protected function makeRequest(string $dir, string $group, string $name, string $type, array $columns)
     {
         $folderPath = app_path("Http/Requests/{$dir}/{$group}");
         if (!is_dir($folderPath)) {
@@ -251,12 +251,12 @@ class MakeCrudFilesCommand extends Command
             'serviceNamespace' => "App\Services\\{$group}",
             'model' => $name,
             'service' => "{$name}Service",
-            'class' => ucfirst($actionType) . "{$name}Action",
+            'class' => $name . ucfirst($actionType) . "Action",
             'modelVar' => lcfirst($name),
             'methods' => $methodContent,
         ]);
 
-        $fileName = ucfirst($actionType) . "{$name}Action.php";
+        $fileName = $name . ucfirst($actionType) . "Action.php";
         file_put_contents("{$folderPath}/{$fileName}", $content);
     }
 
@@ -286,7 +286,7 @@ class MakeCrudFilesCommand extends Command
      * Create Views
      */
 
-    protected function makeViews(string $dir,string $group, string $name)
+    protected function makeViews(string $dir, string $group, string $name)
     {
         $folderPath = resource_path("js/pages/{$dir}/{$group}");
         if (!is_dir($folderPath))

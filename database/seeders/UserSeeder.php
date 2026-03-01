@@ -13,10 +13,14 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
+        $developerInfo = config('app.developer');
         $developer = new User();
         $developer->name = 'Developer';
-        $developer->email = 'developer@mustamirun.agency';
+        $developer->email = $developerInfo['email'];
         $developer->password = bcrypt('password#');
+        $developer->email_verified_at = now();
         $developer->save();
+
+        $developer->assignRole('super admin');
     }
 }

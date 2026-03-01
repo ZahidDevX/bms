@@ -1,10 +1,10 @@
 <?php
 
-namespace {{ namespace }};
+namespace App\Http\Requests\Administration\Authorization;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class {{ model }}StoreRequest extends FormRequest
+class RoleUpdateRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -14,7 +14,7 @@ class {{ model }}StoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-{{ rules }}
+            'name' => ['string', 'required', 'max:255', 'unique:roles,name,' . $this->role->id],
         ];
     }
 }

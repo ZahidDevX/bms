@@ -4,19 +4,15 @@ namespace {{ namespace }};
 
 use {{ modelNamespace }}\{{ model }};
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use {{ requestNamespace }}\{{ storeRequest }};
 use {{ requestNamespace }}\{{ updateRequest }};
 use {{ resourceNamespace }}\{{ resource }};
-use {{ actionsNamespace }}\List{{ model }}Action;
-use {{ actionsNamespace }}\Create{{ model }}Action;
-use {{ actionsNamespace }}\Store{{ model }}Action;
-use {{ actionsNamespace }}\Show{{ model }}Action;
-use {{ actionsNamespace }}\Edit{{ model }}Action;
-use {{ actionsNamespace }}\Update{{ model }}Action;
-use {{ actionsNamespace }}\Delete{{ model }}Action;
-use {{ actionsNamespace }}\Restore{{ model }}Action;
-use {{ actionsNamespace }}\ForceDelete{{ model }}Action;
-use {{ actionsNamespace }}\Change{{ model }}StatusAction;
+use {{ actionsNamespace }}\{{ model }}StoreAction;
+use {{ actionsNamespace }}\{{ model }}UpdateAction;
+use {{ actionsNamespace }}\{{ model }}RestoreAction;
+use {{ actionsNamespace }}\{{ model }}ForceDeleteAction;
+use App\Utilities\StatusChanger;
 use Inertia\Inertia;
 
 class {{ class }} extends Controller
@@ -25,25 +21,29 @@ class {{ class }} extends Controller
      * Display a listing of the resource.
      */
 
-    public function index(List{{ model }}Action $action)
+    public function index(Request $request)
     {
-        return Inertia::render('{{ inertiaListingPage }}', $action->handle());
+        return Inertia::render('{{ inertiaListingPage }}', [
+            
+        ]);
     }
 
     /**
      * Show the form for creating a new resource.
      */
 
-    public function create(Create{{ model }}Action $action)
+    public function create()
     {
-        return Inertia::render('{{ inertiaCreatePage }}', $action->handle());   
+        return Inertia::render('{{ inertiaListingPage }}', [
+            
+        ]);  
     }
 
     /**
      * Store a newly created resource in storage.
      */
 
-    public function store(Store{{ model }}Request $request, Store{{ model }}Action $action)
+    public function store({{ model }}StoreRequest $request, {{ model }}StoreAction $action)
     {
         return new {{ resource }}(
             $action->handle($request->validated())
@@ -54,10 +54,10 @@ class {{ class }} extends Controller
      * Display the specified resource.
      */
 
-    public function show({{ model }} ${{ modelVar }}, Show{{ model }}Action $action)
+    public function show({{ model }} ${{ modelVar }})
     {
         return Inertia::render('{{ inertiaDetailsPage }}', [
-            'data' => $action->handle(${{ modelVar }})
+            
         ]);
     }
 
@@ -65,16 +65,18 @@ class {{ class }} extends Controller
      * Show the form for editing the specified resource.
      */
 
-    public function edit({{ model }} ${{ modelVar }}, Edit{{ model }}Action $action)
+    public function edit({{ model }} ${{ modelVar }})
     {
-        return Inertia::render('{{ inertiaEditPage }}', $action->handle(${{ modelVar }}));
+        return Inertia::render('{{ inertiaEditPage }}', [
+            
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
 
-    public function update(Update{{ model }}Request $request, {{ model }} ${{ modelVar }}, Update{{ model }}Action $action)
+    public function update({{ model }}UpdateRequest $request, {{ model }} ${{ modelVar }}, {{ model }}UpdateAction $action)
     {
         return new {{ resource }}(
             $action->handle(${{ modelVar }}, $request->validated())
@@ -85,17 +87,20 @@ class {{ class }} extends Controller
      * Remove the specified resource from storage.
      */
 
-    public function destroy({{ model }} ${{ modelVar }}, Delete{{ model }}Action $action)
+    public function destroy({{ model }} ${{ modelVar }})
     {
-        $action->handle(${{ modelVar }});
-        return response()->noContent();
+        try {
+            ${{ modelVar }}->delete();
+        }
+        catch (Exception $e) {
+        }
     }
 
     /**
      * Restore the specified resource from storage.
      */
 
-    public function restore(int $id, Restore{{ model }}Action $action)
+    public function restore({{ model }} ${{ modelVar }}, {{ model }}RestoreAction $action)
     {
         $action->handle({{ model }}::withTrashed()->findOrFail($id));
         return response()->json(['message' => '{{ model }} restored successfully']);
@@ -105,7 +110,7 @@ class {{ class }} extends Controller
      * Permanently delete the specified resource from storage.
      */
 
-    public function forceDelete(int $id, ForceDelete{{ model }}Action $action)
+    public function forceDelete({{ model }} ${{ modelVar }}, {{ model }}ForceDeleteAction $action)
     {
         $action->handle({{ model }}::withTrashed()->findOrFail($id));
         return response()->json(['message' => '{{ model }} permanently deleted']);
@@ -115,10 +120,8 @@ class {{ class }} extends Controller
      * Change status of the specified resource.
      */
 
-    public function changeStatus({{ model }} ${{ modelVar }}, Change{{ model }}StatusAction $action)
+    public function changeStatus({{ model }} ${{ modelVar }})
     {
-        return new {{ resource }}(
-            $action->handle(${{ modelVar }}, request()->status)
-        );
+        return StatusChanger::changeStatus(${{ modelVar }}, {{ model }});
     }
 }

@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import { useLayout } from '@/layouts/composables/layout';
+import Toast from 'primevue/toast';
 import { computed } from 'vue';
 import AppFooter from './AppFooter.vue';
 import AppSidebar from './AppSidebar.vue';
 import AppTopbar from './AppTopbar.vue';
-import Toast from 'primevue/toast';
-
 
 const { layoutConfig, layoutState, hideMobileMenu } = useLayout();
 
@@ -15,7 +14,7 @@ const containerClass = computed(() => {
         'layout-static': layoutConfig.menuMode === 'static',
         'layout-overlay-active': layoutState.overlayMenuActive,
         'layout-mobile-active': layoutState.mobileMenuActive,
-        'layout-static-inactive': layoutState.staticMenuInactive
+        'layout-static-inactive': layoutState.staticMenuInactive,
     };
 });
 </script>

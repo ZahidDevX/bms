@@ -11,8 +11,6 @@ class {{ class }}
 
     public function handle(): array
     {
-        return [
-
-        ];
+        return [];
     }
 }
